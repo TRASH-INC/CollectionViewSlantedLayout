@@ -26,6 +26,10 @@ import UIKit
 
 extension UICollectionViewLayout {
 
+    var numberOfSections: Int {
+        return collectionView!.numberOfSections
+    }
+
     var numberOfItems: Int {
         return collectionView!.numberOfItems(inSection: 0)
     }
