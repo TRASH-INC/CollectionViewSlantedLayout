@@ -30,8 +30,8 @@ extension UICollectionViewLayout {
         return collectionView!.numberOfSections
     }
 
-    var numberOfItems: Int {
-        return collectionView!.numberOfItems(inSection: 0)
+    funct numberOfItems:(section section:Int) ->  Int {
+        return collectionView!.numberOfItems(inSection: section)
     }
 
     var width: CGFloat {
