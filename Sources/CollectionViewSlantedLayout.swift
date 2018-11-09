@@ -251,30 +251,32 @@ extension CollectionViewSlantedLayout {
         let staticMasks = calculatedMasks(itemSize: max(itemSize, 0))
         var position: CGFloat = 0
 
-        for item in 0..<numberOfItems {
-            let indexPath = IndexPath(item: item, section: 0)
-            let attributes = CollectionViewSlantedLayoutAttributes(forCellWith: indexPath)
-            let size = itemSize(forItemAt: indexPath)
+        for section in 0..<numberOfSections {
+            for item in 0..<numberOfItems {
+                let indexPath = IndexPath(item: item, section: section)
+                let attributes = CollectionViewSlantedLayoutAttributes(forCellWith: indexPath)
+                let size = itemSize(forItemAt: indexPath)
 
-            let frame: CGRect
-            if scrollDirection.isVertical {
-                frame = CGRect(x: 0, y: position, width: width, height: size.value)
-            } else {
-                frame = CGRect(x: position, y: 0, width: size.value, height: height)
+                let frame: CGRect
+                if scrollDirection.isVertical {
+                    frame = CGRect(x: 0, y: position, width: width, height: size.value)
+                } else {
+                    frame = CGRect(x: position, y: 0, width: size.value, height: height)
+                }
+
+                attributes.frame = frame
+                attributes.size = frame.size
+                attributes.zIndex = zIndexOrder.isAscending ? item : (numberOfItems - item)
+                attributes.slantedLayerMask = maskForItemAtIndexPath(indexPath,
+                                                                     size: size.value,
+                                                                     isDynamicSize: size.isDynamic,
+                                                                     staticMasks: staticMasks)
+
+                cachedAttributes.append(attributes)
+                cachedContentSize += size.value
+
+                position += size.value + lineSpacing - CGFloat(slantingSize)
             }
-
-            attributes.frame = frame
-            attributes.size = frame.size
-            attributes.zIndex = zIndexOrder.isAscending ? item : (numberOfItems - item)
-            attributes.slantedLayerMask = maskForItemAtIndexPath(indexPath,
-                                                                 size: size.value,
-                                                                 isDynamicSize: size.isDynamic,
-                                                                 staticMasks: staticMasks)
-
-            cachedAttributes.append(attributes)
-            cachedContentSize += size.value
-
-            position += size.value + lineSpacing - CGFloat(slantingSize)
         }
     }
 
