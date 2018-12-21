@@ -29,7 +29,7 @@ extension UICollectionViewLayout {
     var numberOfSections: Int {
         return collectionView!.numberOfSections
     }
-
+ 
     func numberOfItems(_ section:Int) ->  Int {
         return collectionView!.numberOfItems(inSection: section)
     }
