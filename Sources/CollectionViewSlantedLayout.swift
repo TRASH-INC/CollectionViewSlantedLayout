@@ -172,7 +172,7 @@ import UIKit
         }
 
         // isLastCell && isLastCellExcluded
-        if (indexPath.row == numberOfItems - 1) && isLastCellExcluded {
+        if (indexPath.row == numberOfItems(indexPath.section) - 1) && isLastCellExcluded {
             return masks.endingMask
         }
 
@@ -225,7 +225,10 @@ extension CollectionViewSlantedLayout {
 
     /// :nodoc:
     override open var collectionViewContentSize: CGSize {
-        let contentSize = CGFloat(numberOfItems - 1) * (lineSpacing - CGFloat(slantingSize)) + cachedContentSize
+        var contentSize: CGFloat = 0.0
+        for section in 0..<numberOfSections {
+            contentSize += CGFloat(numberOfItems(section) - 1) * (lineSpacing - CGFloat(slantingSize)) + cachedContentSize
+        }
         if scrollDirection.isVertical {
             return CGSize(width: width, height: contentSize)
         }
@@ -252,7 +255,7 @@ extension CollectionViewSlantedLayout {
         var position: CGFloat = 0
 
         for section in 0..<numberOfSections {
-            for item in 0..<numberOfItems {
+            for item in 0..<numberOfItems(section) {
                 let indexPath = IndexPath(item: item, section: section)
                 let attributes = CollectionViewSlantedLayoutAttributes(forCellWith: indexPath)
                 let size = itemSize(forItemAt: indexPath)
@@ -266,7 +269,7 @@ extension CollectionViewSlantedLayout {
 
                 attributes.frame = frame
                 attributes.size = frame.size
-                attributes.zIndex = zIndexOrder.isAscending ? item : (numberOfItems - item)
+                attributes.zIndex = zIndexOrder.isAscending ? item : (numberOfItems(section) - item)
                 attributes.slantedLayerMask = maskForItemAtIndexPath(indexPath,
                                                                      size: size.value,
                                                                      isDynamicSize: size.isDynamic,
